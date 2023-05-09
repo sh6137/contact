@@ -16,7 +16,7 @@ class _MyAppState extends State<MyApp> {
   var name = ['김영숙', '홍길동', '피자집'];
   var count = [0, 0, 0];
 
-  //자식에서 부모를 변경 하고 싶을 때
+  // 자식에서 부모를 변경 하고 싶을  -> 함수를 하나 만들어서 값 변경
   addOne(nameValue, countValue) {
     setState(() {
       total++;
