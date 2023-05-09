@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(
-      MaterialApp(
-          home: MyApp()
-      )
-  );
+  runApp(MaterialApp(home: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -16,24 +12,35 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  var a = 1;
+  var total = 3;
   var name = ['김영숙', '홍길동', '피자집'];
   var count = [0, 0, 0];
+
+  //자식에서 부모를 변경 하고 싶을 때
+  addOne(nameValue, countValue) {
+    setState(() {
+      total++;
+      count.add(countValue);
+      name.add(nameValue);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        child: Text(a.toString()),
+        child: Text(total.toString()),
         onPressed: () {
-          showDialog(context: context, builder: (context) {
-            return Dialog(child: Text('안녕'),);
-          });
+          showDialog(
+              context: context,
+              builder: (context) {
+                return DialogUI(name: name, total: total, addOne: addOne);
+              });
         },
       ),
       appBar: AppBar(title: Text('앱제목')),
       body: ListView.builder(
-        itemCount: 3,
+        itemCount: total,
         itemBuilder: (context, i) {
           return ListTile(
             leading: Image.asset('assets/lion.png'),
@@ -42,6 +49,47 @@ class _MyAppState extends State<MyApp> {
         },
       ),
       bottomNavigationBar: BottomCustom(),
+    );
+  }
+}
+
+class DialogUI extends StatelessWidget {
+  DialogUI({Key? key, this.name, this.total, this.addOne}) : super(key: key);
+  final total;
+  final name;
+  final addOne;
+
+  var inputData = TextEditingController();
+  var inputData2 = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      child: Column(
+        children: [
+          TextField(
+            controller: inputData,
+          ),
+          Text(
+            name.toString(),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+          ),
+          Text(total.toString()),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text('No'),
+          ),
+          TextButton(
+            onPressed: () {
+              addOne(inputData.text.toString(), 0);
+              Navigator.pop(context);
+            },
+            child: Text('Yes'),
+          ),
+        ],
+      ),
     );
   }
 }
